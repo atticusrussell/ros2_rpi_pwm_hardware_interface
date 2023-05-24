@@ -12,16 +12,23 @@ find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 
+find_library(PIGPIO_IF2_LIB pigpiod_if2 REQUIRED)
+
 add_library(
   rpi_pwm_hardware_interface
   SHARED
   src/rpi_pwm_hardware_interface.cpp
+  src/angular_servo.cpp
 )
 target_include_directories(
   rpi_pwm_hardware_interface
   PUBLIC
   include
 )
+
+# Add the PIGPIO_IF2_LIB to the target_link_libraries
+target_link_libraries(craft_hardware ${PIGPIO_IF2_LIB})
+
 ament_target_dependencies(
   rpi_pwm_hardware_interface
   hardware_interface

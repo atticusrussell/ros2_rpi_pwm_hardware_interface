@@ -16,9 +16,11 @@
 #ifndef RPI_PWM_HARDWARE_INTERFACE__RPI_PWM_HARDWARE_INTERFACE_HPP_
 #define RPI_PWM_HARDWARE_INTERFACE__RPI_PWM_HARDWARE_INTERFACE_HPP_
 
+#include <memory>
 #include <string>
 #include <vector>
 
+#include "rpi_pwm_hardware_interface/angular_servo.hpp"
 #include "rpi_pwm_hardware_interface/visibility_control.h"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/handle.hpp"
@@ -31,6 +33,26 @@ namespace rpi_pwm_hardware_interface
 {
 class RPiPWMHardwareInterface : public hardware_interface::SystemInterface
 {
+
+struct ServoConfig
+{
+  std::string name = "";
+  int pin = 0;
+  int pi = 0;
+  float min_angle = 0.0;
+  float max_angle = 0.0;
+  int min_pulse_width_us = 0;
+  int max_pulse_width_us = 0;
+};
+
+struct ServoJoint
+{
+  std::string name = "";
+  std::unique_ptr<AngularServo> servo;
+  double pos = 0;
+  double cmd = 0;
+};
+
 public:
   TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
   hardware_interface::CallbackReturn on_init(
@@ -63,8 +85,8 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
-  std::vector<double> hw_commands_;
-  std::vector<double> hw_states_;
+  ServoConfig srv_cfg_;
+  ServoJoint rudder_joint_;
 };
 
 }  // namespace rpi_pwm_hardware_interface
