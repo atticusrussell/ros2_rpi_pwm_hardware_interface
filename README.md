@@ -163,3 +163,6 @@ Here are some useful references for developing with ROS2:
  - [Colcon Documentation](https://colcon.readthedocs.io/en/released/#)
  - [ROS2 Design Documentation](https://design.ros2.org/)
  - [ROS2 Launch Architecture](https://github.com/ros2/launch/blob/master/launch/doc/source/architecture.rst)
+
+Pluginlib-Library: rpi_pwm_hardware_interface
+Plugin: rpi_pwm_hardware_interface/RPiPWMHardwareInterface (hardware_interface::SystemInterface)
