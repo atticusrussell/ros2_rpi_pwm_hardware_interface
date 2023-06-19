@@ -30,63 +30,67 @@
 #include "rclcpp_lifecycle/state.hpp"
 #include "rpi_pwm_hardware_interface/angular_servo.hpp"
 
-namespace rpi_pwm_hardware_interface {
-class RPiPWMHardwareInterface : public hardware_interface::SystemInterface {
-      struct ServoConfig {
-            std::string name = "";
-            int pin = 0;
-            int pi = 0;
-            float min_angle = 0.0;
-            float max_angle = 0.0;
-            int min_pulse_width_us = 0;
-            int max_pulse_width_us = 0;
-      };
+namespace rpi_pwm_hardware_interface
+{
+class RPiPWMHardwareInterface : public hardware_interface::SystemInterface
+{
+  struct ServoConfig
+  {
+    std::string name = "";
+    int pin = 0;
+    int pi = 0;
+    float min_angle = 0.0;
+    float max_angle = 0.0;
+    int min_pulse_width_us = 0;
+    int max_pulse_width_us = 0;
+  };
 
-      struct ServoJoint {
-            std::string name = "";
-            std::unique_ptr<AngularServo> servo;
-            double pos = 0;
-            double cmd = 0;
-      };
+  struct ServoJoint
+  {
+    std::string name = "";
+    std::unique_ptr<AngularServo> servo;
+    double pos = 0;
+    double cmd = 0;
+  };
 
-   public:
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      hardware_interface::CallbackReturn on_init(
-               const hardware_interface::HardwareInfo& info) override;
+public:
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  hardware_interface::CallbackReturn on_init(
+    const hardware_interface::HardwareInfo & info) override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      hardware_interface::CallbackReturn on_configure(
-               const rclcpp_lifecycle::State& previous_state) override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  hardware_interface::CallbackReturn on_configure(
+    const rclcpp_lifecycle::State & previous_state) override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      hardware_interface::CallbackReturn on_cleanup(
-               const rclcpp_lifecycle::State& previous_state) override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  hardware_interface::CallbackReturn on_cleanup(
+    const rclcpp_lifecycle::State & previous_state) override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      hardware_interface::CallbackReturn on_activate(
-               const rclcpp_lifecycle::State& previous_state) override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  hardware_interface::CallbackReturn on_activate(
+    const rclcpp_lifecycle::State & previous_state) override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      hardware_interface::CallbackReturn on_deactivate(
-               const rclcpp_lifecycle::State& previous_state) override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  hardware_interface::CallbackReturn on_deactivate(
+    const rclcpp_lifecycle::State & previous_state) override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      hardware_interface::return_type read(const rclcpp::Time& time,
-               const rclcpp::Duration& period) override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  hardware_interface::return_type read(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-      TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
-      hardware_interface::return_type write(const rclcpp::Time& time,
-               const rclcpp::Duration& period) override;
+  TEMPLATES__ROS2_CONTROL__VISIBILITY_PUBLIC
+  hardware_interface::return_type write(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
-   private:
-      ServoConfig srv_cfg_;
-      ServoJoint rudder_joint_;
+private:
+  ServoConfig srv_cfg_;
+  ServoJoint rudder_joint_;
 };
 
 }  // namespace rpi_pwm_hardware_interface
