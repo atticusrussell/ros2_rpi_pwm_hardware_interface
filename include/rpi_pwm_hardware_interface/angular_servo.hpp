@@ -29,7 +29,7 @@ class Servo {
 class AngularServo : public Servo {
     public:
         AngularServo(int pi, int pin, float minAngle, float maxAngle, int minPulseWidthUs,
-                int maxPulseWidthUs);
+                    int maxPulseWidthUs);
         void setAngle(float angle);
         int getAngle();
 

@@ -26,7 +26,7 @@ class TestRPiPWMHardwareInterface : public ::testing::Test {
         void SetUp() override {
             // TODO(anyone): Extend this description to your robot
             rpi_pwm_hardware_interface_2dof_ =
-                    R"(
+                        R"(
         <ros2_control name="RPiPWMHardwareInterface2dof" type="system">
           <hardware>
             <plugin>rpi_pwm_hardware_interface/RPiPWMHardwareInterface</plugin>
@@ -50,6 +50,6 @@ class TestRPiPWMHardwareInterface : public ::testing::Test {
 
 TEST_F(TestRPiPWMHardwareInterface, load_rpi_pwm_hardware_interface_2dof) {
     auto urdf = ros2_control_test_assets::urdf_head + rpi_pwm_hardware_interface_2dof_ +
-            ros2_control_test_assets::urdf_tail;
+                ros2_control_test_assets::urdf_tail;
     ASSERT_NO_THROW(hardware_interface::ResourceManager rm(urdf));
 }

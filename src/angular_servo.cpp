@@ -30,10 +30,10 @@ Servo::Servo(int pi, int pin) {
     __pin = pin;
     int rc;
     rc = set_mode(__pi, __pin, PI_OUTPUT);
-    if (rc < 0){
+    if (rc < 0) {
         throw "Invalid GPIO pin or mode Error!";
     }
-    
+
     // initializing to zero with pigpio is no input
     rc = set_servo_pulsewidth(__pi, __pin, 0);
     if (rc < 0) {
@@ -49,37 +49,43 @@ int Servo::getPulseWidth() {
     return rc;
 }
 
-void Servo::setPulseWidth(int pulseWidth){
+void Servo::setPulseWidth(int pulseWidth) {
     int rc = set_servo_pulsewidth(__pi, __pin, pulseWidth);
     if (rc < 0) {
         throw "Invalid user GPIO pin or pulsewidth Error!";
     }
 }
 
-AngularServo::AngularServo(int pi, int pin, float minAngle, float maxAngle, int minPulseWidthUs, int maxPulseWidthUs) : Servo(pi, pin) {
-            __minAngle = minAngle;
-            __maxAngle = maxAngle;
-            __minPulseWidthUs = minPulseWidthUs;
-            __maxPulseWidthUs = maxPulseWidthUs;
+AngularServo::AngularServo(int pi, int pin, float minAngle, float maxAngle, int minPulseWidthUs,
+            int maxPulseWidthUs)
+    : Servo(pi, pin) {
+    __minAngle = minAngle;
+    __maxAngle = maxAngle;
+    __minPulseWidthUs = minPulseWidthUs;
+    __maxPulseWidthUs = maxPulseWidthUs;
 }
 
-void AngularServo::setAngle(float angle){
+void AngularServo::setAngle(float angle) {
     __angle = angle;
     // make sure angle is within bounds
-    if (__angle < __minAngle){
+    if (__angle < __minAngle) {
         __angle = __minAngle;
     }
-    if (__angle > __maxAngle){
+    if (__angle > __maxAngle) {
         __angle = __maxAngle;
     }
-    int pulseWidth = __minPulseWidthUs + (__angle - __minAngle) * (__maxPulseWidthUs - __minPulseWidthUs) / (__maxAngle - __minAngle);
+    int pulseWidth = __minPulseWidthUs +
+                (__angle - __minAngle) * (__maxPulseWidthUs - __minPulseWidthUs) /
+                            (__maxAngle - __minAngle);
 
     setPulseWidth(pulseWidth);
 }
 
-int AngularServo::getAngle(){
+int AngularServo::getAngle() {
     int pulseWidth = getPulseWidth();
-    float angle = __minAngle + (pulseWidth - __minPulseWidthUs) * (__maxAngle - __minAngle) / (__maxPulseWidthUs - __minPulseWidthUs);
+    float angle = __minAngle +
+                (pulseWidth - __minPulseWidthUs) * (__maxAngle - __minAngle) /
+                            (__maxPulseWidthUs - __minPulseWidthUs);
     return angle;
 }
 
@@ -122,7 +128,7 @@ void startPigpiod() {
             cout << "pigpiod daemon started successfully" << endl;
         } else {
             // An error occurred while trying to start the pigpiod daemon
-            cerr << "Error starting pigpiod daemon." << endl; 
+            cerr << "Error starting pigpiod daemon." << endl;
         }
     } else {
         cout << "pigpiod daemon is already running" << endl;

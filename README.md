@@ -7,7 +7,7 @@ ROS2 control hardware interface package for controlling a servo motor through a 
 
 # Dependency on PiGPIO
 
-This hardware interface requires the pigpio library to interface with the pwm pins on the pi. The installation instructions for pigpio are: 
+This hardware interface requires the pigpio library to interface with the pwm pins on the pi. The installation instructions for pigpio are:
 ```
 wget https://github.com/joan2937/pigpio/archive/master.zip
 unzip master.zip
