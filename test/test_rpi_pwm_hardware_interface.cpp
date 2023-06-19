@@ -25,24 +25,23 @@ class TestRPiPWMHardwareInterface : public ::testing::Test {
     protected:
         void SetUp() override {
             // TODO(anyone): Extend this description to your robot
-            rpi_pwm_hardware_interface_2dof_ =
-                        R"(
-        <ros2_control name="RPiPWMHardwareInterface2dof" type="system">
-          <hardware>
-            <plugin>rpi_pwm_hardware_interface/RPiPWMHardwareInterface</plugin>
-          </hardware>
-          <joint name="joint1">
-            <command_interface name="position"/>
-            <state_interface name="position"/>
-            <param name="initial_position">1.57</param>
-          </joint>
-          <joint name="joint2">
-            <command_interface name="position"/>
-            <state_interface name="position"/>
-            <param name="initial_position">0.7854</param>
-          </joint>
-        </ros2_control>
-    )";
+            rpi_pwm_hardware_interface_2dof_ = R"(
+                  <ros2_control name="RPiPWMHardwareInterface2dof" type="system">
+                     <hardware>
+                        <plugin>rpi_pwm_hardware_interface/RPiPWMHardwareInterface</plugin>
+                     </hardware>
+                     <joint name="joint1">
+                        <command_interface name="position"/>
+                        <state_interface name="position"/>
+                        <param name="initial_position">1.57</param>
+                     </joint>
+                     <joint name="joint2">
+                        <command_interface name="position"/>
+                        <state_interface name="position"/>
+                        <param name="initial_position">0.7854</param>
+                     </joint>
+                  </ros2_control>
+                  )";
         }
 
         std::string rpi_pwm_hardware_interface_2dof_;
