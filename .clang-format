@@ -2,7 +2,7 @@
 Language:        Cpp
 BasedOnStyle:    LLVM
 
-AccessModifierOffset: 4
+AccessModifierOffset: 0
 AlignAfterOpenBracket: DontAlign
 AlignConsecutiveAssignments: false
 AlignConsecutiveBitFields: false
@@ -45,9 +45,10 @@ ColumnLimit: 100
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
+ContinuationIndentWidth: 8
 Cpp11BracedListStyle: true
 DeriveLineEnding: true
+IndentAccessModifiers: true
 IndentCaseBlocks: true
 IndentCaseLabels: true
 IndentExternBlock: Indent
@@ -71,7 +72,7 @@ SpaceBeforeInheritanceColon: true
 SpaceBeforeParens: ControlStatements
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceInEmptyBlock: true
-SpacesBeforeTrailingComments: 1
+SpacesBeforeTrailingComments: 2
 SpacesInAngles:  false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
