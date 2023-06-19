@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <iostream>
+#include <pigpiod_if2.h>
+
 #include <csignal>
 #include <cstdlib>
 #include <functional>
-#include <pigpiod_if2.h>
+#include <iostream>
+
 #include "rpi_pwm_hardware_interface/angular_servo.hpp"
 
-using namespace std;
+using std::cout, std::cerr, std::endl;
 
-// TODO revisit private vs protected vars - maybe swap to private 
+// TODO(anyone) revisit private vs protected vars - maybe swap to private
 
 Servo::Servo(int pi, int pin) {
     __pi = pi;
