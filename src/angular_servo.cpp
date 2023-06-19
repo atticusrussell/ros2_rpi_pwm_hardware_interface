@@ -119,10 +119,10 @@ void killPigpiod() {
 void startPigpiod() {
   if (!isPigpiodRunning()) {
     cout << "pigpio daemon not running. attempting to start it." << endl;
-    system("sudo systemctl start pigpiod");
+    int rc = system("sudo systemctl start pigpiod");
     sleep(1);
 
-    if (isPigpiodRunning()) {
+    if (isPigpiodRunning() && (rc != -1)) {
       // Successfully started the pigpiod daemon
       cout << "pigpiod daemon started successfully" << endl;
     } else {
