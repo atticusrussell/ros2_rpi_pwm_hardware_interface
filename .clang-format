@@ -44,8 +44,8 @@ BreakConstructorInitializers: BeforeComma
 ColumnLimit: 100
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 12
+ConstructorInitializerIndentWidth: 3
+ContinuationIndentWidth: 9
 Cpp11BracedListStyle: true
 DeriveLineEnding: true
 IndentAccessModifiers: true
@@ -54,7 +54,7 @@ IndentCaseLabels: true
 IndentExternBlock: Indent
 IndentGotoLabels: true
 IndentPPDirectives: None
-IndentWidth:     4
+IndentWidth:     3
 KeepEmptyLinesAtTheStartOfBlocks: true
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
@@ -77,6 +77,6 @@ SpacesInAngles:  false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-TabWidth:        4
+TabWidth:        3
 UseTab:          Never
 ...
