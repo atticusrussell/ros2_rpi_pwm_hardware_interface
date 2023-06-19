@@ -25,8 +25,7 @@ using std::cout, std::cerr, std::endl;
 
 // TODO(anyone) revisit private vs protected vars - maybe swap to private
 
-Servo::Servo(int pi, int pin)
-{
+Servo::Servo(int pi, int pin) {
   __pi = pi;
   __pin = pin;
   int rc;
@@ -42,8 +41,7 @@ Servo::Servo(int pi, int pin)
   }
 }
 
-int Servo::getPulseWidth()
-{
+int Servo::getPulseWidth() {
   int rc = get_servo_pulsewidth(__pi, __pin);
   if (rc < 0) {
     throw "Invalid user GPIO pin Error!";
@@ -51,26 +49,23 @@ int Servo::getPulseWidth()
   return rc;
 }
 
-void Servo::setPulseWidth(int pulseWidth)
-{
+void Servo::setPulseWidth(int pulseWidth) {
   int rc = set_servo_pulsewidth(__pi, __pin, pulseWidth);
   if (rc < 0) {
     throw "Invalid user GPIO pin or pulsewidth Error!";
   }
 }
 
-AngularServo::AngularServo(
-  int pi, int pin, float minAngle, float maxAngle, int minPulseWidthUs, int maxPulseWidthUs)
-: Servo(pi, pin)
-{
+AngularServo::AngularServo(int pi, int pin, float minAngle, float maxAngle, int minPulseWidthUs,
+    int maxPulseWidthUs) :
+Servo(pi, pin) {
   __minAngle = minAngle;
   __maxAngle = maxAngle;
   __minPulseWidthUs = minPulseWidthUs;
   __maxPulseWidthUs = maxPulseWidthUs;
 }
 
-void AngularServo::setAngle(float angle)
-{
+void AngularServo::setAngle(float angle) {
   __angle = angle;
   // make sure angle is within bounds
   if (__angle < __minAngle) {
@@ -80,22 +75,20 @@ void AngularServo::setAngle(float angle)
     __angle = __maxAngle;
   }
   int pulseWidth = __minPulseWidthUs +
-    (__angle - __minAngle) * (__maxPulseWidthUs - __minPulseWidthUs) / (__maxAngle - __minAngle);
+      (__angle - __minAngle) * (__maxPulseWidthUs - __minPulseWidthUs) / (__maxAngle - __minAngle);
 
   setPulseWidth(pulseWidth);
 }
 
-int AngularServo::getAngle()
-{
+int AngularServo::getAngle() {
   int pulseWidth = getPulseWidth();
   float angle = __minAngle +
-    (pulseWidth - __minPulseWidthUs) * (__maxAngle - __minAngle) /
-      (__maxPulseWidthUs - __minPulseWidthUs);
+      (pulseWidth - __minPulseWidthUs) * (__maxAngle - __minAngle) /
+          (__maxPulseWidthUs - __minPulseWidthUs);
   return angle;
 }
 
-bool isPigpiodRunning()
-{
+bool isPigpiodRunning() {
   int result = system("pgrep pigpiod");
 
   if (result == 0) {
@@ -107,8 +100,7 @@ bool isPigpiodRunning()
   }
 }
 
-void killPigpiod()
-{
+void killPigpiod() {
   if (isPigpiodRunning()) {
     int result = system("sudo killall pigpiod -q");
 
@@ -124,8 +116,7 @@ void killPigpiod()
   }
 }
 
-void startPigpiod()
-{
+void startPigpiod() {
   if (!isPigpiodRunning()) {
     cout << "pigpio daemon not running. attempting to start it." << endl;
     system("sudo systemctl start pigpiod");
