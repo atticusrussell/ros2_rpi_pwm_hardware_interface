@@ -34,7 +34,7 @@ jobs:
           unzip master.zip
           cd pigpio-master
           make
-          make install
+          sudo make install
       - uses: actions/checkout@v3 # clone target repository
       - uses: actions/cache@v2 # fetch/store the directory used by ccache before/after the ci run
         with:
