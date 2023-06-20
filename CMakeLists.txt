@@ -56,7 +56,7 @@ install(
   DESTINATION include
 )
 
-# if(BUILD_TESTING)
+if(BUILD_TESTING)
 #   find_package(ament_lint_auto REQUIRED)
 #   # the following line skips the linter which checks for copyrights
 #   # uncomment the line when a copyright and license is added to all source files
@@ -65,18 +65,18 @@ install(
 #   # set(ament_cmake_cpplint_FOUND TRUE)
 #   # ament_lint_auto_find_test_dependencies()
 
-#   # find_package(ament_cmake_gmock REQUIRED)
-#   # find_package(ros2_control_test_assets REQUIRED)
+  find_package(ament_cmake_gmock REQUIRED)
+  find_package(ros2_control_test_assets REQUIRED)
 
-#   # ament_add_gmock(test_rpi_pwm_hardware_interface test/test_rpi_pwm_hardware_interface.cpp)
-#   # target_include_directories(test_rpi_pwm_hardware_interface PRIVATE include)
-#   # ament_target_dependencies(
-#   #   test_rpi_pwm_hardware_interface
-#   #   hardware_interface
-#   #   pluginlib
-#   #   ros2_control_test_assets
-#   # )
-# endif()
+  ament_add_gmock(test_rpi_pwm_hardware_interface test/test_rpi_pwm_hardware_interface.cpp)
+  target_include_directories(test_rpi_pwm_hardware_interface PRIVATE include)
+  ament_target_dependencies(
+    test_rpi_pwm_hardware_interface
+    hardware_interface
+    pluginlib
+    ros2_control_test_assets
+  )
+endif()
 
 ament_export_include_directories(
   include
