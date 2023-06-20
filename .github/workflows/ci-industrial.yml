@@ -21,10 +21,10 @@ jobs:
       run: echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
     - name: Emulate Raspberry Pi 3B with Ubuntu 22.04 using QEMU
       run: |
-        wget https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.2-preinstalled-desktop-arm64+raspi.img.xz
-        xz -d ubuntu-22.04-preinstalled-server-arm64+raspi.img.xz
-          qemu-img resize ubuntu-22.04-preinstalled-server-arm64+raspi.img +8G
-          qemu-system-aarch64 -machine type=raspi3 -m 1024 -kernel vmlinux -initrd initramfs -drive file=ubuntu-22.04-preinstalled-server-arm64+raspi.img,format=raw -append "root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.macaddr=DC:A6:32:01:5C:B7 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 dwc_otg.lpm_enable=0"
+        wget https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
+        xz -d ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
+          qemu-img resize ubuntu-22.04.2-preinstalled-server-arm64+raspi.img +8G
+          qemu-system-aarch64 -machine type=raspi3 -m 1024 -kernel vmlinux -initrd initramfs -drive file=ubuntu-22.04.2-preinstalled-server-arm64+raspi.img,format=raw -append "root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.macaddr=DC:A6:32:01:5C:B7 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 dwc_otg.lpm_enable=0"
     - name: Install pigpio library on the emulated Pi
       run: |
         echo '#!/bin/bash' > install_pigpio.sh
