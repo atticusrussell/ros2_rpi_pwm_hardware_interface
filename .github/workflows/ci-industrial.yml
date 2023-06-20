@@ -19,33 +19,28 @@ jobs:
         optimize_image: false
         image_additional_mb: 8096
         commands: |
+          echo "Emulated Pi info"
           cat /etc/os-release
           uname -a
           ls -la
           grep Model /proc/cpuinfo
+          pwd
+          echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
+          
+          echo "installing pigpio"
+          cd ~
+          wget https://github.com/joan2937/pigpio/archive/master.zip
+          unzip master.zip
+          cd pigpio-master
+          make
+          sudo make install
     
-    - name: Verify info in next run 
-      run: |
-        grep Model /proc/cpuinfo
-        pwd
-        ls -la
-        echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
-    - name: Install pigpio library on the emulated Pi
-      run: |
-        cd ~
-        wget https://github.com/joan2937/pigpio/archive/master.zip
-        unzip master.zip
-        cd pigpio-master
-        make
-        sudo make install
-
-    - name: test pigpio library on the emulated Pi
-      run: |
-        sudo ./x_pigpio
-        sudo pigpiod
-        ./x_pigpiod_if2
-        ./x_pigs
-        ./x_pipe
+          echo "test pigpio library on the emulated Pi"
+          sudo ./x_pigpio
+          sudo pigpiod
+          ./x_pigpiod_if2
+          ./x_pigs
+          ./x_pipe
 
 
 
