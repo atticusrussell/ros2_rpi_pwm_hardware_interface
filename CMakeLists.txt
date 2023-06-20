@@ -12,8 +12,26 @@ find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 
-find_library(PIGPIO_IF2_LIB pigpiod_if2 REQUIRED)
-find_library(PIGPIO_LIB pigpio REQUIRED)
+################################################################################
+### Find the pigpio shared libraries.
+################################################################################
+	
+# Find the pigpio libraries.
+find_library(PIGPIO_LIB 
+	NAMES libpigpio.so
+	HINTS /usr/local/lib
+  REQUIRED)
+
+find_library(PIGPIO_IF2_LIB 
+	NAMES libpigpiod_if2.so
+	HINTS /usr/local/lib
+  REQUIRED)
+
+################################################################################
+################################################################################
+
+# find_library(PIGPIO_IF2_LIB pigpiod_if2 REQUIRED)
+# find_library(PIGPIO_LIB pigpio REQUIRED)
 
 add_library(
   rpi_pwm_hardware_interface
