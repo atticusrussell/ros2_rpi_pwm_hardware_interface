@@ -28,13 +28,20 @@ jobs:
     env:
       CCACHE_DIR: "${{ github.workspace }}/.ccache" # directory for ccache (and how we enable ccache in industrial_ci)
     steps:
+      - name: Set current directory
+        run: echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
+      - name: Change to home directory
+        run: cd ~
       - name: Install pigpio library
         run: |
+          cd ~
           wget https://github.com/joan2937/pigpio/archive/master.zip
           unzip master.zip
           cd pigpio-master
           make
           sudo make install
+      - name: Go back to current directory
+        run: cd $CURRENT_DIR
       - uses: actions/checkout@v3 # clone target repository
       - uses: actions/cache@v2 # fetch/store the directory used by ccache before/after the ci run
         with:
