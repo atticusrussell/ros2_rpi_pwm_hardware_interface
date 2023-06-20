@@ -16,6 +16,7 @@ jobs:
         base_image: https://cdimage.ubuntu.com/releases/22.04.2/release/ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
         cpu: cortex-a7
         cpu_info: cpuinfo/raspberrypi_zero2_w_arm64 
+        export_github_env: true
         optimize_image: false
         image_additional_mb: 8096
         commands: |
@@ -25,7 +26,7 @@ jobs:
           ls -la
           grep Model /proc/cpuinfo
           pwd
-          echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
+          echo "CURRENT_DIR=$(pwd)" >> ${GITHUB_ENV}
           
           echo "installing pigpio"
           cd ~
