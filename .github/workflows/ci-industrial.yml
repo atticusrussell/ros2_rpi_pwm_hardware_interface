@@ -16,13 +16,31 @@ jobs:
         base_image: https://cdimage.ubuntu.com/releases/22.04.2/release/ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
         cpu: cortex-a7
         cpu_info: cpuinfo/raspberrypi_zero2_w_arm64 
-
-
         commands: |
           cat /etc/os-release
           uname -a
           ls -la
           grep Model /proc/cpuinfo
+    
+    - name: Install pigpio library on the emulated Pi and check it
+      run: |
+        grep Model /proc/cpuinfo
+        pwd
+        ls -la
+        echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
+        Cd ~
+        wget https://github.com/joan2937/pigpio/archive/master.zip
+        unzip master.zip
+        cd pigpio-master
+        make
+        sudo make install
+        
+        sudo ./x_pigpio
+        sudo pigpiod
+        ./x_pigpiod_if2
+        ./x_pigs
+        ./x_pipe
+
 
 
 # jobs:
