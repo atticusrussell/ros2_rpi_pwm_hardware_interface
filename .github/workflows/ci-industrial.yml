@@ -40,17 +40,23 @@ jobs:
           cd pigpio-master
           make
           sudo make install
-      - name: Verify pigpio library install
+      - name: See where I am
         run: |
-          sudo ./x_pigpio # check C I/F
-          sudo pigpiod    # start daemon
-          ./x_pigpiod_if2 # check C      I/F to daemon
-          ./x_pigpio.py   # check Python I/F to daemon
-          ./x_pigs        # check pigs   I/F to daemon
-          ./x_pipe        # check pipe   I/F to daemon
-      - name: Go back to prev directory
-        run: cd $CURRENT_DIR
-      - uses: actions/checkout@v3 # clone target repository
+          pwd
+          ls -la
+          cd ..
+          ls -la
+      # - name: Verify pigpio library install
+      #   run: |
+      #     sudo ./x_pigpio # check C I/F
+      #     sudo pigpiod    # start daemon
+      #     ./x_pigpiod_if2 # check C      I/F to daemon
+      #     ./x_pigpio.py   # check Python I/F to daemon
+      #     ./x_pigs        # check pigs   I/F to daemon
+      #     ./x_pipe        # check pipe   I/F to daemon
+      # - name: Go back to prev directory
+      #   run: cd $CURRENT_DIR
+      # - uses: actions/checkout@v3 # clone target repository
         
       # - uses: actions/cache@v2 # fetch/store the directory used by ccache before/after the ci run
       #   with:
