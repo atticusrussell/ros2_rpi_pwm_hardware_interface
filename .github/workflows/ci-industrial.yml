@@ -38,6 +38,10 @@ jobs:
 
             echo "making dir for pigpio"
             mkdir -p /opt/pigpio
+
+            echo "installing required packages"
+            sudo apt-get update -y --allow-releaseinfo-change
+            sudo apt-get install --no-install-recommends -y unzip build-essential
             
             echo "installing pigpio"
             cd /opt/pigpio
