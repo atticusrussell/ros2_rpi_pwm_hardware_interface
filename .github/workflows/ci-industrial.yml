@@ -1,5 +1,5 @@
 
-name: CI Industrial
+name: CI Industrial Pi
 
 on: 
   push:
@@ -7,56 +7,69 @@ on:
   workflow_dispatch: 
 
 jobs:
-  industrial_ci:
-    name: ROS ${{ matrix.ROS_DISTRO }} (${{ matrix.ROS_REPO }})
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ROS_DISTRO: [humble, rolling]
-        ROS_REPO: [main]
-    env:
-      CCACHE_DIR: "${{ github.workspace }}/.ccache" 
+  build_ubuntu_22_04_rpi3:
+    runs-on: ubuntu-22.04
     steps:
-    - name: Set current directory
-      run: echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
-    - name: Emulate Raspberry Pi 3B with Ubuntu 22.04 using QEMU
-      run: |
-        wget https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
-        xz -d ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
-          qemu-img resize ubuntu-22.04.2-preinstalled-server-arm64+raspi.img +8G
-          qemu-system-aarch64 -machine type=raspi3 -m 1024 -kernel vmlinux -initrd initramfs -drive file=ubuntu-22.04.2-preinstalled-server-arm64+raspi.img,format=raw -append "root=/dev/mmcblk0p2 rw rootwait console=ttyAMA0,115200 console=tty1 selinux=0 plymouth.enable=0 smsc95xx.macaddr=DC:A6:32:01:5C:B7 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 dwc_otg.lpm_enable=0"
-    - name: Install pigpio library on the emulated Pi
-      run: |
-        echo '#!/bin/bash' > install_pigpio.sh
-        echo 'cd ~' >> install_pigpio.sh
-        echo 'wget https://github.com/joan2937/pigpio/archive/master.zip' >> install_pigpio.sh
-        echo 'unzip master.zip' >> install_pigpio.sh
-        echo 'cd pigpio-master' >> install_pigpio.sh
-        echo 'make' >> install_pigpio.sh
-        echo 'sudo make install' >> install_pigpio.sh
-        echo 'sudo ./x_pigpio # check C I/F' >> install_pigpio.sh
-        echo 'sudo pigpiod    # start daemon' >> install_pigpio.sh
-        echo './x_pigpiod_if2 # check C      I/F to daemon' >> install_pigpio.sh
-        echo './x_pigpio.py   # check Python I/F to daemon' >> install_pigpio.sh
-        echo './x_pigs        # check pigs   I/F to daemon' >> install_pigpio.sh
-        echo './x_pipe        # check pipe   I/F to daemon' >> install_pigpio.sh
-        chmod +x install_pigpio.sh
-        qemu-system-aarch64 -machine type=raspi3 -m 1024 -kernel vmlinux -initrd initramfs -init /home/user/install_pigpio.sh
-      
     - uses: actions/checkout@v3 # clone target repository
-      
-    - uses: actions/cache@v2 # fetch/store the directory used by ccache before/after the ci run
+    - uses: pguyot/arm-runner-action@HEAD
       with:
-        path: ${{ env.CCACHE_DIR }}
-        # This configuration will always create a new ccache cache starting off from the previous one (if any).
-        # In this simple version it will be shared between all builds of the same ROS_REPO and ROS_REPO
-        # and might need some fine-tuning to match the use case
-        key: ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-${{github.run_id}}
-        restore-keys: |
-          ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-
-    - uses: 'ros-industrial/industrial_ci@master' # run industrial_ci
-      env: # either pass all entries explicitly
-        ROS_DISTRO: ${{ matrix.ROS_DISTRO }}
-        ROS_REPO: ${{ matrix.ROS_REPO }}
-      # with: # or pass the full matrix as config
-      #    config: ${{toJSON(matrix)}}
+        base_image: https://cdimage.ubuntu.com/releases/22.04.2/release/ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
+        cpu: cortex-a7
+        cpu_info: cpuinfo/raspberrypi_zero2_w_arm64 
+
+
+        commands: |
+          cat /etc/os-release
+          uname -a
+          ls -la
+          grep Model /proc/cpuinfo
+
+
+# jobs:
+#   industrial_ci:
+#     name: ROS ${{ matrix.ROS_DISTRO }} (${{ matrix.ROS_REPO }})
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         ROS_DISTRO: [humble]
+#         ROS_REPO: [main]
+#     env:
+#       CCACHE_DIR: "${{ github.workspace }}/.ccache" 
+#     steps:
+
+
+#     - name: Install pigpio library on the emulated Pi
+#       run: |
+#         echo '#!/bin/bash' > install_pigpio.sh
+#         echo 'cd ~' >> install_pigpio.sh
+#         echo 'wget https://github.com/joan2937/pigpio/archive/master.zip' >> install_pigpio.sh
+#         echo 'unzip master.zip' >> install_pigpio.sh
+#         echo 'cd pigpio-master' >> install_pigpio.sh
+#         echo 'make' >> install_pigpio.sh
+#         echo 'sudo make install' >> install_pigpio.sh
+#         echo 'sudo ./x_pigpio # check C I/F' >> install_pigpio.sh
+#         echo 'sudo pigpiod    # start daemon' >> install_pigpio.sh
+#         echo './x_pigpiod_if2 # check C      I/F to daemon' >> install_pigpio.sh
+#         echo './x_pigpio.py   # check Python I/F to daemon' >> install_pigpio.sh
+#         echo './x_pigs        # check pigs   I/F to daemon' >> install_pigpio.sh
+#         echo './x_pipe        # check pipe   I/F to daemon' >> install_pigpio.sh
+#         chmod +x install_pigpio.sh
+#         qemu-system-aarch64 -machine type=raspi3 -m 1024 -kernel vmlinux -initrd initramfs -init /home/user/install_pigpio.sh
+      
+    # - uses: actions/checkout@v3 # clone target repository
+      
+    # - uses: actions/cache@v2 # fetch/store the directory used by ccache before/after the ci run
+    #   with:
+    #     path: ${{ env.CCACHE_DIR }}
+    #     # This configuration will always create a new ccache cache starting off from the previous one (if any).
+    #     # In this simple version it will be shared between all builds of the same ROS_REPO and ROS_REPO
+    #     # and might need some fine-tuning to match the use case
+    #     key: ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-${{github.run_id}}
+    #     restore-keys: |
+    #       ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-
+    # - uses: 'ros-industrial/industrial_ci@master' # run industrial_ci
+    #   env: # either pass all entries explicitly
+    #     ROS_DISTRO: ${{ matrix.ROS_DISTRO }}
+    #     ROS_REPO: ${{ matrix.ROS_REPO }}
+    #   # with: # or pass the full matrix as config
+    #   #    config: ${{toJSON(matrix)}}
