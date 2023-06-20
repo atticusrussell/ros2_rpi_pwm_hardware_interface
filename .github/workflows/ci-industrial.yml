@@ -9,39 +9,50 @@ on:
 jobs:
   build_ubuntu_22_04_rpi3:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
     steps:
-    - uses: actions/checkout@v3 # clone target repository
-    - uses: pguyot/arm-runner-action@HEAD
-      with:
-        base_image: https://cdimage.ubuntu.com/releases/22.04.2/release/ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
-        cpu: cortex-a7
-        cpu_info: cpuinfo/raspberrypi_zero2_w_arm64 
-        export_github_env: true
-        optimize_image: false
-        image_additional_mb: 8096
-        commands: |
-          echo "Emulated Pi info"
-          cat /etc/os-release
-          uname -a
-          ls -la
-          grep Model /proc/cpuinfo
-          pwd
-          echo "CURRENT_DIR=$(pwd)" >> ${GITHUB_ENV}
-          
-          echo "installing pigpio"
-          cd ~
-          wget https://github.com/joan2937/pigpio/archive/master.zip
-          unzip master.zip
-          cd pigpio-master
-          make
-          sudo make install
-    
-          echo "test pigpio library on the emulated Pi"
-          sudo ./x_pigpio
-          sudo pigpiod
-          ./x_pigpiod_if2
-          ./x_pigs
-          ./x_pipe
+      - name: Checkout rpi_pwm_hardware_interface
+        uses: actions/checkout@v3
+
+      # TODO download rpi u22.04 image and keep in artifact
+
+      - name: emulate Rpi3b with ubuntu 22.04 chroot
+        uses: pguyot/arm-runner-action@HEAD
+        with:
+          base_image: https://cdimage.ubuntu.com/releases/22.04.2/release/ubuntu-22.04.2-preinstalled-server-arm64+raspi.img.xz
+          cpu: cortex-a7
+          cpu_info: cpuinfo/raspberrypi_zero2_w_arm64
+          copy_repository_path: /opt/rpi_pwm_hardware_interface
+          export_github_env: true
+          optimize_image: false
+          image_additional_mb: 8192
+          commands: |
+            echo "Emulated Pi info"
+            pwd
+            ls -la
+            ls -la /
+            cat /etc/os-release
+            uname -a
+            grep Model /proc/cpuinfo
+
+            echo "making dir for pigpio"
+            mkdir -p /opt/pigpio
+            
+            echo "installing pigpio"
+            cd /opt/pigpio
+            wget https://github.com/joan2937/pigpio/archive/master.zip
+            unzip master.zip
+            cd pigpio-master
+            make
+            sudo make install
+      
+            echo "test pigpio library on the emulated Pi"
+            sudo ./x_pigpio
+            sudo pigpiod
+            ./x_pigpiod_if2
+            ./x_pigs
+            ./x_pipe
 
 
 
