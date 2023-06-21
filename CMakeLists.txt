@@ -5,15 +5,15 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-
-find_library(PIGPIO_IF2_LIB pigpiod_if2 REQUIRED)
-find_library(PIGPIO_LIB pigpio REQUIRED)
+find_package(pigpio REQUIRED)
 
 add_library(
   rpi_pwm_hardware_interface
@@ -21,15 +21,23 @@ add_library(
   src/rpi_pwm_hardware_interface.cpp
   src/angular_servo.cpp
 )
+
+include_directories(
+  ${pigpio_INCLUDE_DIR}
+)
+
 target_include_directories(
   rpi_pwm_hardware_interface
   PUBLIC
   include
 )
 
+add_dependencies(${PROJECT_NAME} pigpio)
+# add_dependencies(${PROJECT_NAME} pigpiod_if2)
+
 # Add PIGPIO to the target_link_libraries
-target_link_libraries(rpi_pwm_hardware_interface ${PIGPIO_IF2_LIB})
-target_link_libraries(rpi_pwm_hardware_interface ${PIGPIO_LIB})
+# target_link_libraries(rpi_pwm_hardware_interface ${PIGPIO_IF2_LIB})
+target_link_libraries(rpi_pwm_hardware_interface ${pigpio_LIBRARIES})
 
 ament_target_dependencies(
   rpi_pwm_hardware_interface
