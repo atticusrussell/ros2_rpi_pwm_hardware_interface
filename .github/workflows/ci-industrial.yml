@@ -39,6 +39,10 @@ jobs:
           key: ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-${{github.run_id}}
           restore-keys: |
             ccache-${{ matrix.ROS_DISTRO }}-${{ matrix.ROS_REPO }}-
+      - run: |
+          sudo apt update
+          sudo apt install git -y --no-install-recommends
+          sudo apt install build-essential -y --no-install-recommends
       - uses: 'ros-industrial/industrial_ci@master' # run industrial_ci
         env: # either pass all entries explicitly
           ROS_DISTRO: ${{ matrix.ROS_DISTRO }}
